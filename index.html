@@ -5,17 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Справочник терминов</title>
 
-    <!-- Метатег для manifest.json -->
+    <!-- Ссылка на manifest.json -->
     <link rel="manifest" href="/manifest.json">
 
     <!-- Метатеги для Safari (iPhone) -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Справочник терминов">
+    <meta name="apple-mobile-web-app-capable" content="yes"> <!-- Позволяет запускать PWA как нативное приложение -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="default"> <!-- Устанавливает стиль статусной строки -->
+    <meta name="apple-mobile-web-app-title" content="Справочник терминов"> <!-- Название приложения на главном экране -->
 
     <!-- Иконки для Safari -->
-    <link rel="apple-touch-icon" href="/icon-192x192.png">
-    <link rel="apple-touch-icon" sizes="512x512" href="/icon-512x512.png">
+    <link rel="apple-touch-icon" href="/icon-180x180.png"> <!-- Иконка 180x180 для iPhone -->
+    <link rel="apple-touch-icon" sizes="192x192" href="/icon-192x192.png"> <!-- Иконка 192x192 -->
+    <link rel="apple-touch-icon" sizes="512x512" href="/icon-512x512.png"> <!-- Иконка 512x512 -->
 
     <!-- Основные стили -->
     <style>
@@ -169,20 +170,20 @@
         .description p {
             white-space: pre-line; /* Сохраняем форматирование описания */
         }
-    </style>
 
-    <!-- Регистрация Service Worker -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js').then(registration => {
-                    console.log('Service Worker registered with scope:', registration.scope);
-                }).catch(error => {
-                    console.log('Service Worker registration failed:', error);
+        <!-- Регистрация Service Worker -->
+        <script>
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('/sw.js').then(registration => {
+                        console.log('Service Worker registered with scope:', registration.scope);
+                    }).catch(error => {
+                        console.log('Service Worker registration failed:', error);
+                    });
                 });
-            });
-        }
-    </script>
+            }
+        </script>
+    </style>
 </head>
 <body>
     <!-- Титульный лист -->
