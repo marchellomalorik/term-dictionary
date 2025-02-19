@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Справочник терминов</title>
+
+    <!-- Метатег для manifest.json -->
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- Метатеги для Safari (iPhone) -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Справочник терминов">
+
+    <!-- Иконки для Safari -->
+    <link rel="apple-touch-icon" href="/icon-192x192.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="/icon-512x512.png">
+
+    <!-- Основные стили -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+
+        /* Стили для титульного листа */
+        .title-page {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            position: relative; /* Для позиционирования автора */
+        }
+
+        .title-page h1 {
+            font-size: 3em;
+            margin: 0;
+        }
+
+        .title-page button {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            background-color: white;
+            color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .title-page button:hover {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        /* Автор и контактная информация */
+        .author-info {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 0.8em;
+            color: white;
+        }
+
+        .author-info a {
+            color: white;
+            text-decoration: underline;
+        }
+
+        /* Стили для страницы терминов */
+        .terms-page {
+            display: none; /* Сначала скрыто */
+            padding: 20px;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: #3e8e41;
+        }
+
+        /* Группировка кнопки и строки поиска */
+        .header-actions {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .header-actions .search-container {
+            margin-left: 20px;
+            flex: 1;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .terms-header h1 {
+            margin-top: 0;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .list {
+            flex: 1;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            background-color: #fff;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .list-item {
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .list-item:hover {
+            background-color: #e0e0e0;
+        }
+
+        .description {
+            flex: 2;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 20px;
+            background-color: #fff;
+            display: none; /* Сначала скрыто */
+        }
+
+        .description.active {
+            display: block; /* Показываем при активации */
+        }
+
+        .description h2 {
+            margin-top: 0;
+        }
+
+        .description p {
+            white-space: pre-line; /* Сохраняем форматирование описания */
+        }
+    </style>
+
+    <!-- Регистрация Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').then(registration => {
+                    console.log('Service Worker registered with scope:', registration.scope);
+                }).catch(error => {
+                    console.log('Service Worker registration failed:', error);
+                });
+            });
+        }
+    </script>
+</head>
+<body>
+    <!-- Титульный лист -->
+    <div class="title-page" id="titlePage">
+        <h1>Справочник терминов</h1>
+        <button onclick="showTerms()">Перейти к терминам</button>
+
+        <!-- Информация об авторе -->
+        <div class="author-info">
+            Автор: Марат М.<br>
+            <a href="mailto:goldhands@list.ru">goldhands@list.ru</a>
+        </div>
+    </div>
+
+    <!-- Страница терминов -->
+    <div class="terms-page" id="termsPage">
+        <!-- Кнопка "Назад" и строка поиска на одном уровне -->
+        <div class="header-actions">
+            <button class="back-button" onclick="goBack()">← Назад на главную</button>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Поиск термина..." oninput="filterTerms()">
+            </div>
+        </div>
+
+        <!-- Заголовок ниже строки поиска -->
+        <h1 class="terms-header">Справочник терминов</h1>
+
+        <div class="container">
+            <!-- Первый лист: Список терминов -->
+            <div class="list" id="termList">
+                <div class="list-item" data-term="FS">FS (Feasibility study)</div>
+                <div class="list-item" data-term="PreFeed">Pre-Feed (Pre-front engineering design)</div>
+                <div class="list-item" data-term="BP">BP (Engineering-Basic Project)</div>
+                <div class="list-item" data-term="FEED">FEED (Engineering-Front end engineering design)</div>
+                <div class="list-item" data-term="PD">PD (Engineering-Project design)</div>
+                <div class="list-item" data-term="DD">DD (Engineering-Detail design)</div>
+                <div class="list-item" data-term="P">P (Procurement)</div>
+                <div class="list-item" data-term="C">C (Construction)</div>
+                <div class="list-item" data-term="Cg">Cg (Comissioning)</div>
+                <div class="list-item" data-term="PMC">PMC (Project management contract)</div>
+                <div class="list-item" data-term="EP">EP (Engineering + Procurement)</div>
+                <div class="list-item" data-term="EPs">EPs (Engineering + Procurement Service)</div>
+                <div class="list-item" data-term="EPo">EPo (Engineering + Procurement Service)</div>
+                <div class="list-item" data-term="EPsCm">EPsCm (Engineering + Procurement Service + Construction management)</div>
+                <div class="list-item" data-term="EPCm">EPCm (Engineering + Procurement + Construction management)</div>
+                <div class="list-item" data-term="EPC">EPC (Engineering + Procurement + Construction)</div>
+                <div class="list-item" data-term="PDP">PDP (Process Design Package)</div>
+                <div class="list-item" data-term="PFD">PFD (Process flow diagram)</div>
+                <div class="list-item" data-term="ISBL">ISBL (Inside Battery Limits)</div>
+                <div class="list-item" data-term="OSBL">OSBL (Outside Battery Limits)</div>
+                <div class="list-item" data-term="BOQ">BOQ (Bill of quantities)</div>
+                <div class="list-item" data-term="PID">PID (Piping and instrumentation diagram)</div>
+                <div class="list-item" data-term="HAZID">HAZID (Hazard identification)</div>
+                <div class="list-item" data-term="HAZOP">HAZOP (Hazard and operability study)</div>
+                <div class="list-item" data-term="SIL">SIL (Safety Integrity Level)</div>
+                <div class="list-item" data-term="TermSheet">Term Sheet (Term sheet)</div>
+                <div class="list-item" data-term="KickOff">Kick-Off (Kick-off meeting)</div>
+                <div class="list-item" data-term="OVOS">ОВОС (Оценка воздействия на окружающую среду)</div>
+                <div class="list-item" data-term="OTBOS">ОТБОС (Охрана труда, техника безопасности и охрана окружающей среды)</div>
+            </div>
+
+            <!-- Второй лист: Описание термина -->
+            <div class="description" id="description">
+                <h2 id="term-title">Выберите термин</h2>
+                <p id="term-description">Описание появится здесь.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Словарь терминов
+        const terms = {
+            FS: "Пред проектные работы - инвестиционный замысел",
+            PreFeed: "Пред проектные работы - обоснование инвестиций, ТЭР",
+            BP: "Проектирование - базовый проект",
+            FEED: "Проектирование - Расширенный базовый проект. Включает базовое моделирование, разработку проекта, оценку затрат и времени реализации проекта. С РФ по объему схож с разделом «исходные данные для проектирования», а по форме напоминает ПД без некоторых разделов",
+            PD: "Проектирование - проектная документация и сопровождение инжиниринга оборудования",
+            DD: "Проектирование - рабочая документация и сопровождение инжиниринга оборудования",
+            P: "Изготовление и поставка (в т.ч. РКД)",
+            C: "Строительство (в т.ч. комплектация материалами)",
+            Cg: "Пусконаладка",
+            PMC: "Оказание услуг по консультированию в части управления проектом",
+            EP: "Проектирование + Изготовление и поставка (в т.ч. РКД) = Управление проектом EP",
+            EPs: "Проектирование + Техническое сопровождение договоров на Изготовление и поставку (в т.ч. РКД) = Управление проектом по модели EPs",
+            EPo: "Проектирование + разработка РКД = Управление проектом EPo",
+            EPsCm: "Проектирование + Техническое сопровождение договоров на Изготовление и поставку (в т.ч. РКД) + Управление проектом на этапе строительства = Управление проектом по модели EPsCm",
+            EPCm: "Проектирование + Изготовление и поставка (в т.ч. РКД) + Управление проектом на этапе строительства = Управление по модели EPCm",
+            EPC: "Проектирование + Изготовление и поставка (в т.ч. РКД) + строительство = Управление по модели EPC",
+            PDP: "Пакет технической документации",
+            PFD: "Технологическая схема процесса",
+            ISBL: "Внутризаводские объекты",
+            OSBL: "Внеплощадочные объекты",
+            BOQ: "Ведомость объемов работ",
+            PID: "Технологическая схема трубопроводов и КИПиА",
+            HAZID: "Это идентификация опасностей. Инструмент распознавания рисков, который используется на ранних стадиях проекта, сразу после создания проектирования, расчета материальных затрат и подготовки генерального плана строительство объекта",
+            HAZOP: "Анализ опасностей и работоспособности",
+            SIL: "Уровень полноты безопасности рассматривает опасные ситуации отказов, которые приводят к авариям, катастрофам и человеческим жертвам. Уровни SIL определяют величину допустимого риска для системы",
+            TermSheet: "Соглашение по базовым условиям или соглашение об основных условиях сделки, главным образом юридические и финансовые параметры. Обычно не имеет юридической силы",
+            KickOff: "Стартовая встреча с участниками и заказчиком проекта",
+            OVOS: "Оценка воздействия на окружающую среду",
+            OTBOS: "Охрана труда, техника безопасности и охрана окружающей среды"
+        };
+
+        // Элементы для работы
+        const titlePage = document.getElementById('titlePage');
+        const termsPage = document.getElementById('termsPage');
+        const descriptionDiv = document.getElementById('description');
+        const termTitle = document.getElementById('term-title');
+        const termDescription = document.getElementById('term-description');
+        const searchInput = document.getElementById('searchInput');
+        const termList = document.getElementById('termList');
+
+        // Функция для показа страницы терминов
+        function showTerms() {
+            titlePage.style.display = 'none'; // Скрываем титульный лист
+            termsPage.style.display = 'block'; // Показываем страницу терминов
+        }
+
+        // Функция для возврата на титульный лист
+        function goBack() {
+            titlePage.style.display = 'flex'; // Показываем титульный лист
+            termsPage.style.display = 'none'; // Скрываем страницу терминов
+            descriptionDiv.classList.remove('active'); // Скрываем описание термина
+            termTitle.textContent = 'Выберите термин'; // Сбрасываем заголовок
+            termDescription.textContent = 'Описание появится здесь.'; // Сбрасываем описание
+        }
+
+        // Фильтрация терминов по вводу в строку поиска
+        function filterTerms() {
+            const query = searchInput.value.toLowerCase().trim();
+            const items = termList.getElementsByClassName('list-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const item = items[i];
+                const text = item.textContent.toLowerCase();
+                if (text.includes(query)) {
+                    item.style.display = ''; // Показываем элемент
+                } else {
+                    item.style.display = 'none'; // Скрываем элемент
+                }
+            }
+        }
+
+        // Добавляем обработчики событий для каждого элемента списка
+        document.querySelectorAll('.list-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const termKey = item.getAttribute('data-term');
+                const term = terms[termKey];
+
+                // Проверяем, существует ли такой термин
+                if (term) {
+                    termTitle.textContent = item.textContent;
+                    termDescription.textContent = term;
+
+                    // Показываем блок с описанием
+                    descriptionDiv.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
