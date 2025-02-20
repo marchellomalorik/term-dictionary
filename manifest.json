@@ -1,7 +1,7 @@
 {
   "name": "Справочник терминов",
   "short_name": "Термины",
-  "start_url": "https://marchellomalorik.github.io/term-dictionary/index.html", // Полный путь
+  "start_url": "https://marchellomalorik.github.io/term-dictionary/index.html",
   "display": "standalone",
   "background_color": "#4CAF50",
   "theme_color": "#4CAF50",
