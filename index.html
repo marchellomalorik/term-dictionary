@@ -200,14 +200,17 @@
     </div>
 
     <!-- Страница терминов -->
-    <div class="terms-page" id="termsPage">
-        <!-- Кнопка "Назад" и строка поиска на одном уровне -->
-        <div class="header-actions">
-            <button class="back-button" onclick="goBack()">← Назад на главную</button>
-            <div class="search-container">
-                <input type="text" id="searchInput" placeholder="Поиск термина..." oninput="filterTerms()">
-            </div>
-        </div>
+    <div class="title-page" id="titlePage">
+    <img src="logo.png" alt="Логотип справочника терминов" class="title-logo">
+    <h1>Справочник терминов</h1>
+    <button onclick="showTerms()">Перейти к терминам</button>
+
+    <!-- Информация об авторе -->
+    <div class="author-info">
+        Автор: Марат М.<br>
+        <a href="mailto:goldhands@list.ru">goldhands@list.ru</a>
+    </div>
+</div>
 
         <!-- Заголовок ниже строки поиска -->
         <h1 class="terms-header">Справочник терминов</h1>
