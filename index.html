@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#4CAF50">
-    <title>Справочник терминов</title>
+    <meta name="theme-color" content="#a5d7b9">
+    <title>Глоссарий НГХК</title>
 
     <!-- PWA-манифест -->
-    <link rel="manifest" href="/term-dictionary/manifest.json">
+    <link rel="manifest" href="manifest.json">
 
     <!-- Иконки -->
     <link rel="icon" href="icon-192x192.png" type="image/png">
@@ -39,15 +39,15 @@
             align-items: center;
             min-height: 100vh;
             padding: 20px;
-            background-color: #4CAF50;
-            color: white;
+            background-color: #a5d7b9; /* Новый цвет */
+            color: #333;
             text-align: center;
             position: relative;
             animation: fadeIn 0.8s ease-out;
         }
 
         .title-logo {
-            width: 120px;
+            width: 180px; /* Увеличенный размер */
             height: auto;
             margin-bottom: 25px;
             border-radius: 15px;
@@ -55,17 +55,17 @@
         }
 
         .title-page h1 {
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             margin: 0 0 20px 0;
             font-weight: 600;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .title-page button {
             padding: 14px 35px;
             font-size: 1.1rem;
             background: white;
-            color: #4CAF50;
+            color: #a5d7b9; /* Новый цвет */
             border: none;
             border-radius: 30px;
             cursor: pointer;
@@ -83,17 +83,17 @@
             bottom: 15px;
             right: 15px;
             font-size: 0.75rem;
-            color: rgba(255, 255, 255, 0.9);
+            color: rgba(51, 51, 51, 0.9);
             text-align: right;
         }
 
         .author-info a {
-            color: white;
+            color: #333;
             text-decoration: none;
-            border-bottom: 1px dashed rgba(255, 255, 255, 0.5);
+            border-bottom: 1px dashed rgba(51, 51, 51, 0.5);
         }
 
-        /* Страница терминов */
+        /* Страница глоссария */
         .terms-page {
             display: none;
             padding: 15px;
@@ -103,7 +103,7 @@
             display: inline-block;
             padding: 10px 20px;
             font-size: 1em;
-            background-color: #4CAF50;
+            background-color: #a5d7b9; /* Новый цвет */
             color: white;
             border: none;
             border-radius: 5px;
@@ -112,7 +112,7 @@
         }
 
         .back-button:hover {
-            background-color: #3e8e41;
+            background-color: #8fc3a5; /* Темнее на hover */
         }
 
         .header-actions {
@@ -138,20 +138,21 @@
             margin-top: 0;
             font-size: 2em;
             margin-bottom: 20px;
+            color: #333;
         }
 
         .container {
             display: flex;
+            flex-direction: column;
             gap: 20px;
         }
 
         .list {
-            flex: 1;
             border: 1px solid #ddd;
             border-radius: 4px;
             padding: 10px;
             background-color: #fff;
-            max-height: 500px;
+            max-height: 300px;
             overflow-y: auto;
         }
 
@@ -167,12 +168,12 @@
         }
 
         .description {
-            flex: 2;
             border: 1px solid #ddd;
             border-radius: 4px;
             padding: 20px;
             background-color: #fff;
             display: none;
+            animation: slideUp 0.5s ease-out;
         }
 
         .description.active {
@@ -181,10 +182,12 @@
 
         .description h2 {
             margin-top: 0;
+            color: #333;
         }
 
         .description p {
             white-space: pre-line;
+            color: #555;
         }
 
         /* Адаптация для iPhone */
@@ -194,12 +197,12 @@
             }
 
             .title-logo {
-                width: 90px;
+                width: 150px;
                 margin-bottom: 20px;
             }
 
             .title-page h1 {
-                font-size: 1.8rem;
+                font-size: 2rem;
                 margin-bottom: 15px;
             }
 
@@ -226,14 +229,25 @@
                 transform: translateY(0);
             }
         }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 <body>
     <!-- Титульный лист -->
     <div class="title-page" id="titlePage">
-        <img src="logo.png" alt="Логотип справочника" class="title-logo">
-        <h1>Справочник терминов</h1>
-        <button onclick="showTerms()">Перейти к терминам</button>
+        <img src="logo.png" alt="Логотип НГХК" class="title-logo">
+        <h1>Глоссарий НГХК</h1>
+        <button onclick="showTerms()">Перейти к глоссарию</button>
 
         <div class="author-info">
             Автор: Марат М.<br>
@@ -241,7 +255,7 @@
         </div>
     </div>
 
-    <!-- Страница терминов -->
+    <!-- Страница глоссария -->
     <div class="terms-page" id="termsPage">
         <div class="header-actions">
             <button class="back-button" onclick="goBack()">← Назад на главную</button>
@@ -250,7 +264,7 @@
             </div>
         </div>
 
-        <h1 class="terms-header">Справочник терминов</h1>
+        <h1 class="terms-header">Глоссарий НГХК</h1>
 
         <div class="container">
             <div class="list" id="termList">
