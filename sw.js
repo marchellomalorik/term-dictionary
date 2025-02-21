@@ -1,4 +1,4 @@
-const CACHE_NAME = 'terms-app-v1';
+const CACHE_NAME = 'glossary-app-v1';
 const ASSETS = [
     '/term-dictionary/',
     '/term-dictionary/index.html',
@@ -7,6 +7,7 @@ const ASSETS = [
     '/term-dictionary/icon-512x512.png',
     '/term-dictionary/icon-180x180.png',
     '/term-dictionary/logo.png',
+    '/term-dictionary/hymn.mp3', // Добавляем аудиофайл
     '/term-dictionary/sw.js'
 ];
 
