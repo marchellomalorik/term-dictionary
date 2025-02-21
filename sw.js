@@ -2,6 +2,9 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open('app-cache').then((cache) => {
       return cache.addAll([
+        '/term-dictionary/',
+    '/term-dictionary/index.html',
+    '/term-dictionary/logo.png',
         '/',
         '/index.html',
         '/style.css', // Если у вас есть отдельный CSS-файл
