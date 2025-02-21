@@ -1,8 +1,8 @@
 {
   "name": "Справочник терминов",
   "short_name": "Термины",
-  "start_url": "/index.html",
-  "scope": "/",
+  "start_url": "/term-dictionary/index.html",
+  "scope": "/term-dictionary/",
   "display": "standalone",
   "background_color": "#4CAF50",
   "theme_color": "#2E7D32",
