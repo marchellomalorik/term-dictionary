@@ -2,85 +2,101 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#4CAF50">
     <title>Справочник терминов</title>
 
-    <!-- Ссылка на manifest.json -->
-    <link rel="manifest" href="/manifest.json"/>
+    <!-- PWA-манифест -->
+    <link rel="manifest" href="manifest.json">
 
-    <!-- Метатеги для Safari (iPhone) -->
-    <meta name="apple-mobile-web-app-capable" content="yes"> <!-- Позволяет запускать PWA как нативное приложение -->
-    <meta name="mobile-web-app-capable" content="yes"> <!-- Добавлено для совместимости -->
-    <meta name="apple-mobile-web-app-status-bar-style" content="default"> <!-- Устанавливает стиль статусной строки -->
-    <meta name="apple-mobile-web-app-title" content="Справочник терминов"> <!-- Название приложения на главном экране -->
-
-    <!-- Иконки для Safari -->
+    <!-- Иконки -->
+    <link rel="icon" href="icon-192x192.png" type="image/png">
     <link rel="apple-touch-icon" sizes="192x192" href="icon-192x192.png">
     <link rel="apple-touch-icon" sizes="512x512" href="icon-512x512.png">
     <link rel="apple-touch-icon" sizes="180x180" href="icon-180x180.png">
 
-    <!-- Основные стили -->
+    <!-- Все стили -->
     <style>
+        /* Базовые стили */
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             margin: 0;
             padding: 0;
             line-height: 1.6;
             background-color: #f9f9f9;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* Стили для титульного листа */
+        /* Титульная страница */
         .title-page {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
+            padding: 20px;
             background-color: #4CAF50;
             color: white;
             text-align: center;
-            position: relative; /* Для позиционирования автора */
+            position: relative;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .title-logo {
+            width: 120px;
+            height: auto;
+            margin-bottom: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
         .title-page h1 {
-            font-size: 3em;
-            margin: 0;
+            font-size: 2.2rem;
+            margin: 0 0 20px 0;
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         .title-page button {
-            padding: 15px 30px;
-            font-size: 1.2em;
-            background-color: white;
+            padding: 14px 35px;
+            font-size: 1.1rem;
+            background: white;
             color: #4CAF50;
             border: none;
-            border-radius: 5px;
+            border-radius: 30px;
             cursor: pointer;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
-        .title-page button:hover {
-            background-color: #4CAF50;
-            color: white;
+        .title-page button:active {
+            transform: scale(0.96);
         }
 
-        /* Автор и контактная информация */
+        /* Информация об авторе */
         .author-info {
             position: absolute;
-            bottom: 20px;
-            right: 20px;
-            font-size: 0.8em;
-            color: white;
+            bottom: 15px;
+            right: 15px;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.9);
+            text-align: right;
         }
 
         .author-info a {
             color: white;
-            text-decoration: underline;
+            text-decoration: none;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.5);
         }
 
-        /* Стили для страницы терминов */
+        /* Страница терминов */
         .terms-page {
-            display: none; /* Сначала скрыто */
-            padding: 20px;
+            display: none;
+            padding: 15px;
         }
 
         .back-button {
@@ -99,14 +115,13 @@
             background-color: #3e8e41;
         }
 
-        /* Группировка кнопки и строки поиска */
         .header-actions {
             display: flex;
             align-items: center;
             margin-bottom: 20px;
         }
 
-        .header-actions .search-container {
+        .search-container {
             margin-left: 20px;
             flex: 1;
         }
@@ -157,11 +172,11 @@
             border-radius: 4px;
             padding: 20px;
             background-color: #fff;
-            display: none; /* Сначала скрыто */
+            display: none;
         }
 
         .description.active {
-            display: block; /* Показываем при активации */
+            display: block;
         }
 
         .description h2 {
@@ -169,30 +184,57 @@
         }
 
         .description p {
-            white-space: pre-line; /* Сохраняем форматирование описания */
+            white-space: pre-line;
         }
 
-        <!-- Регистрация Service Worker -->
-        <script>
-            if ('serviceWorker' in navigator) {
-                window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('/sw.js').then(registration => {
-                        console.log('Service Worker registered with scope:', registration.scope);
-                    }).catch(error => {
-                        console.log('Service Worker registration failed:', error);
-                    });
-                });
+        /* Адаптация для iPhone */
+        @media (max-width: 768px) {
+            .title-page {
+                padding: 15px;
             }
-        </script>
+
+            .title-logo {
+                width: 90px;
+                margin-bottom: 20px;
+            }
+
+            .title-page h1 {
+                font-size: 1.8rem;
+                margin-bottom: 15px;
+            }
+
+            .title-page button {
+                padding: 12px 28px;
+                font-size: 1rem;
+            }
+
+            .author-info {
+                font-size: 0.65rem;
+                bottom: 10px;
+                right: 10px;
+            }
+        }
+
+        /* Анимации */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 <body>
     <!-- Титульный лист -->
     <div class="title-page" id="titlePage">
+        <img src="logo.png" alt="Логотип справочника" class="title-logo">
         <h1>Справочник терминов</h1>
         <button onclick="showTerms()">Перейти к терминам</button>
 
-        <!-- Информация об авторе -->
         <div class="author-info">
             Автор: Марат М.<br>
             <a href="mailto:goldhands@list.ru">goldhands@list.ru</a>
@@ -200,23 +242,17 @@
     </div>
 
     <!-- Страница терминов -->
-    <div class="title-page" id="titlePage">
-    <img src="logo.png" alt="Логотип справочника терминов" class="title-logo">
-    <h1>Справочник терминов</h1>
-    <button onclick="showTerms()">Перейти к терминам</button>
+    <div class="terms-page" id="termsPage">
+        <div class="header-actions">
+            <button class="back-button" onclick="goBack()">← Назад на главную</button>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Поиск термина..." oninput="filterTerms()">
+            </div>
+        </div>
 
-    <!-- Информация об авторе -->
-    <div class="author-info">
-        Автор: Марат М.<br>
-        <a href="mailto:goldhands@list.ru">goldhands@list.ru</a>
-    </div>
-</div>
-
-        <!-- Заголовок ниже строки поиска -->
         <h1 class="terms-header">Справочник терминов</h1>
 
         <div class="container">
-            <!-- Первый лист: Список терминов -->
             <div class="list" id="termList">
                 <div class="list-item" data-term="FS">FS (Feasibility study)</div>
                 <div class="list-item" data-term="PreFeed">Pre-Feed (Pre-front engineering design)</div>
@@ -249,7 +285,6 @@
                 <div class="list-item" data-term="OTBOS">ОТБОС (Охрана труда, техника безопасности и охрана окружающей среды)</div>
             </div>
 
-            <!-- Второй лист: Описание термина -->
             <div class="description" id="description">
                 <h2 id="term-title">Выберите термин</h2>
                 <p id="term-description">Описание появится здесь.</p>
@@ -302,17 +337,17 @@
 
         // Функция для показа страницы терминов
         function showTerms() {
-            titlePage.style.display = 'none'; // Скрываем титульный лист
-            termsPage.style.display = 'block'; // Показываем страницу терминов
+            titlePage.style.display = 'none';
+            termsPage.style.display = 'block';
         }
 
         // Функция для возврата на титульный лист
         function goBack() {
-            titlePage.style.display = 'flex'; // Показываем титульный лист
-            termsPage.style.display = 'none'; // Скрываем страницу терминов
-            descriptionDiv.classList.remove('active'); // Скрываем описание термина
-            termTitle.textContent = 'Выберите термин'; // Сбрасываем заголовок
-            termDescription.textContent = 'Описание появится здесь.'; // Сбрасываем описание
+            titlePage.style.display = 'flex';
+            termsPage.style.display = 'none';
+            descriptionDiv.classList.remove('active');
+            termTitle.textContent = 'Выберите термин';
+            termDescription.textContent = 'Описание появится здесь.';
         }
 
         // Фильтрация терминов по вводу в строку поиска
@@ -324,9 +359,9 @@
                 const item = items[i];
                 const text = item.textContent.toLowerCase();
                 if (text.includes(query)) {
-                    item.style.display = ''; // Показываем элемент
+                    item.style.display = '';
                 } else {
-                    item.style.display = 'none'; // Скрываем элемент
+                    item.style.display = 'none';
                 }
             }
         }
@@ -337,16 +372,28 @@
                 const termKey = item.getAttribute('data-term');
                 const term = terms[termKey];
 
-                // Проверяем, существует ли такой термин
                 if (term) {
                     termTitle.textContent = item.textContent;
                     termDescription.textContent = term;
-
-                    // Показываем блок с описанием
                     descriptionDiv.classList.add('active');
                 }
             });
         });
+    </script>
+
+    <!-- Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/term-dictionary/sw.js')
+                    .then(registration => {
+                        console.log('ServiceWorker зарегистрирован');
+                    })
+                    .catch(err => {
+                        console.log('Ошибка регистрации ServiceWorker:', err);
+                    });
+            });
+        }
     </script>
 </body>
 </html>
