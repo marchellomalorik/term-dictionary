@@ -1,26 +1,26 @@
 {
-  "name": "Справочник терминов",
-  "short_name": "Термины",
+  "name": "Глоссарий НГХК",
+  "short_name": "НГХК",
   "start_url": "/term-dictionary/index.html",
   "scope": "/term-dictionary/",
   "display": "standalone",
-  "background_color": "#4CAF50",
-  "theme_color": "#2E7D32",
+  "background_color": "#a5d7b9",
+  "theme_color": "#a5d7b9",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "icon-192x192.png",
+      "src": "/term-dictionary/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "icon-512x512.png",
+      "src": "/term-dictionary/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
     },
     {
-      "src": "icon-180x180.png",
+      "src": "/term-dictionary/icon-180x180.png",
       "sizes": "180x180",
       "type": "image/png",
       "purpose": "maskable"
