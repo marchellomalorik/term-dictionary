@@ -47,7 +47,7 @@
         }
 
         .title-logo {
-            width: 250px; /* Увеличенный размер */
+            width: 250px;
             height: auto;
             margin-bottom: 25px;
             border-radius: 15px;
@@ -61,6 +61,7 @@
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
+        /* Кнопки */
         .title-page button {
             padding: 14px 35px;
             font-size: 1.1rem;
@@ -71,10 +72,12 @@
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            margin: 5px;
+            width: 250px;
         }
 
-        .title-page button:active {
-            transform: scale(0.96);
+        .title-page button:hover {
+            transform: scale(0.98);
         }
 
         /* Информация об авторе */
@@ -93,7 +96,7 @@
             border-bottom: 1px dashed rgba(51, 51, 51, 0.5);
         }
 
-        /* Страница глоссария */
+        /* Страница терминов */
         .terms-page {
             display: none;
             padding: 15px;
@@ -197,7 +200,7 @@
             }
 
             .title-logo {
-                width: 200px; /* Уменьшаем для мобильных устройств */
+                width: 200px;
                 margin-bottom: 20px;
             }
 
@@ -209,6 +212,7 @@
             .title-page button {
                 padding: 12px 28px;
                 font-size: 1rem;
+                width: 220px;
             }
 
             .author-info {
@@ -248,6 +252,7 @@
         <img src="logo.png" alt="Логотип НГХК" class="title-logo">
         <h1>Глоссарий НГХК</h1>
         <button onclick="showTerms()">Перейти к глоссарию</button>
+        <button id="hymnButton" onclick="toggleHymn()">🎵 Послушать гимн НГХК</button>
 
         <div class="author-info">
             Автор: Марат М.<br>
@@ -255,7 +260,7 @@
         </div>
     </div>
 
-    <!-- Страница глоссария -->
+    <!-- Страница терминов -->
     <div class="terms-page" id="termsPage">
         <div class="header-actions">
             <button class="back-button" onclick="goBack()">← Назад на главную</button>
@@ -306,6 +311,12 @@
         </div>
     </div>
 
+    <!-- Аудиоплеер для гимна -->
+    <audio id="hymnAudio">
+        <source src="hymn.mp3" type="audio/mpeg">
+        Ваш браузер не поддерживает аудио.
+    </audio>
+
     <script>
         // Словарь терминов
         const terms = {
@@ -348,6 +359,8 @@
         const termDescription = document.getElementById('term-description');
         const searchInput = document.getElementById('searchInput');
         const termList = document.getElementById('termList');
+        const hymnAudio = document.getElementById('hymnAudio');
+        const hymnButton = document.getElementById('hymnButton');
 
         // Функция для показа страницы терминов
         function showTerms() {
@@ -393,6 +406,17 @@
                 }
             });
         });
+
+        // Функция для управления гимном
+        function toggleHymn() {
+            if (hymnAudio.paused) {
+                hymnAudio.play();
+                hymnButton.textContent = '⏹ Остановить гимн';
+            } else {
+                hymnAudio.pause();
+                hymnButton.textContent = '🎵 Послушать гимн НГХК';
+            }
+        }
     </script>
 
     <!-- Service Worker -->
